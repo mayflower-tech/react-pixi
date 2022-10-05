@@ -2,7 +2,7 @@ import React from 'react'
 import { roots, createRoot } from '../src/render'
 import { PixiFiber, AppConsumer, AppProvider, Container, Text, withPixiApp, Stage } from '../src'
 import { ConcurrentRoot } from 'react-reconciler/constants'
-import * as PIXI from 'pixi.js'
+import { Application } from '@pixi/app'
 
 const act = React.unstable_act
 
@@ -28,7 +28,7 @@ describe('render', () => {
   let app
   let container
   beforeAll(() => {
-    app = new PIXI.Application()
+    app = new Application()
     container = app.stage
   })
 

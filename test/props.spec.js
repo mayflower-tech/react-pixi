@@ -1,6 +1,7 @@
-import * as PIXI from 'pixi.js'
 import { getTextureFromProps, applyDefaultProps, PROPS_DISPLAY_OBJECT, PROPS_RESERVED } from '../src/utils/props'
 import { emptyTexture } from './__fixtures__/textures'
+import { Container } from '@pixi/display'
+import { Texture } from '@pixi/core'
 
 describe('props', () => {
   test('reserved props', () => {
@@ -14,7 +15,7 @@ describe('props', () => {
     let spy
 
     beforeAll(() => {
-      spy = jest.spyOn(PIXI.Texture, 'from').mockReturnValue(emptyTexture)
+      spy = jest.spyOn(Texture, 'from').mockReturnValue(emptyTexture)
     })
 
     afterAll(() => {
@@ -41,27 +42,27 @@ describe('props', () => {
 
     test('get texture from image url', () => {
       const texture = getTextureFromProps('Test', undefined, { image: './image.png' })
-      expect(texture).toBeInstanceOf(PIXI.Texture)
+      expect(texture).toBeInstanceOf(Texture)
       expect(spy).toBeCalledWith('./image.png')
     })
 
     test('get texture from image html element', () => {
       const image = document.createElement('img')
       const texture = getTextureFromProps('Test', undefined, { image })
-      expect(texture).toBeInstanceOf(PIXI.Texture)
+      expect(texture).toBeInstanceOf(Texture)
       expect(spy).toBeCalledWith(image)
     })
 
     test('get texture from video url', () => {
       const texture = getTextureFromProps('Test', undefined, { video: './video.mp4' })
-      expect(texture).toBeInstanceOf(PIXI.Texture)
+      expect(texture).toBeInstanceOf(Texture)
       expect(spy).toBeCalledWith('./video.mp4')
     })
 
     test('get texture from video html element', () => {
       const video = document.createElement('video')
       const texture = getTextureFromProps('Test', undefined, { video })
-      expect(texture).toBeInstanceOf(PIXI.Texture)
+      expect(texture).toBeInstanceOf(Texture)
       expect(spy).toBeCalledWith(video)
     })
 
@@ -79,7 +80,7 @@ describe('props', () => {
     let instance, fn
 
     beforeEach(() => {
-      instance = new PIXI.Container()
+      instance = new Container()
       fn = jest.fn()
     })
 

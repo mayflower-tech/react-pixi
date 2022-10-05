@@ -1,5 +1,5 @@
 import { Canvas, Meta, Story } from '@storybook/addon-docs';
-import * as PIXI from 'pixi.js'
+import { TextStyle } from '@pixi/text'
 import { Stage, Text } from '../../docz-rp'
 import ParticleContainer from './ParticleContainerDocz'
 
@@ -13,7 +13,7 @@ export const Template = (args) => (
     anchor={0.5}
     x={150}
     y={150}
-    style={new PIXI.TextStyle({
+    style={new TextStyle({
       align: 'center',
       fontFamily: '"Source Sans Pro", Helvetica, sans-serif',
       fontSize: 50,

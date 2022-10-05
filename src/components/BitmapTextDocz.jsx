@@ -1,6 +1,6 @@
 import React from 'react'
 import { BitmapText, Text } from '../../docz-rp'
-import * as PIXI from 'pixi.js'
+import { Loader } from '@pixi/loaders'
 
 export default props => {
   const [loaded, setLoaded] = React.useState(false)
@@ -8,7 +8,7 @@ export default props => {
   const y = props.y
 
   React.useEffect(() => {
-    const loader = new PIXI.Loader()
+    const loader = new Loader()
 
     loader.add('desyrel', 'https://s3-us-west-2.amazonaws.com/s.cdpn.io/693612/bitmapfont.xml').load(() => {
       setLoaded(true)

@@ -1,5 +1,6 @@
 import React from 'react'
-import * as PIXI from 'pixi.js'
+import { Container as PixiContainer } from '@pixi/display'
+import { Text as PixiText } from '@pixi/text'
 
 import hostconfig from '../src/reconciler/hostconfig'
 import { createElement } from '../src/utils/element'
@@ -15,7 +16,7 @@ jest.mock('../src/reconciler/hostconfig')
 const act = React.unstable_act
 
 describe('react', () => {
-  let container = new PIXI.Container()
+  let container = new PixiContainer()
   container.root = true
   let root
 
@@ -59,7 +60,7 @@ describe('react', () => {
 
       text.emit('click', { type: 'click', data: 123 })
 
-      expect(text).toBeInstanceOf(PIXI.Text)
+      expect(text).toBeInstanceOf(PixiText)
       expect(text._eventsCount).toEqual(1)
       expect(onClick).toHaveBeenCalledTimes(1)
       expect(onClick.mock.calls[0][0]).toEqual({ type: 'click', data: 123 })

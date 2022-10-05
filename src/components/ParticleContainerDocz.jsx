@@ -1,13 +1,13 @@
 import React from 'react'
 import { ParticleContainer } from '../../docz-rp'
-import * as PIXI from 'pixi.js'
+import { Loader } from '@pixi/loaders'
 
 export default class ParticleContainerDocz extends React.PureComponent {
   state = { loaded: false }
   loader = null
 
   componentDidMount() {
-    this.loader = new PIXI.Loader()
+    this.loader = new Loader()
 
     this.loader.add('https://s3-us-west-2.amazonaws.com/s.cdpn.io/693612/IaUrttj.png').load(() => {
       this.setState({ loaded: true })

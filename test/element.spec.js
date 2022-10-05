@@ -1,4 +1,15 @@
-import * as PIXI from 'pixi.js'
+import { Container } from '@pixi/display'
+import { Graphics } from '@pixi/graphics'
+import { Text } from '@pixi/text'
+import { BitmapText } from '@pixi/text-bitmap'
+import { Sprite } from '@pixi/sprite'
+import { Texture } from '@pixi/core'
+import { AnimatedSprite } from '@pixi/sprite-animated'
+import { ParticleContainer } from '@pixi/particle-container'
+import { TilingSprite } from '@pixi/sprite-tiling'
+import { SimpleRope, SimpleMesh, NineSlicePlane } from '@pixi/mesh-extras'
+import { Point } from '@pixi/math'
+
 import { createElement, TYPES, TYPES_INJECTED, PixiComponent } from '../src/utils/element'
 
 import { emptyTexture } from './__fixtures__/textures'
@@ -14,32 +25,32 @@ describe('createElement', () => {
 
   test('create Container', () => {
     const element = createElement(TYPES.Container)
-    expect(element).toBeInstanceOf(PIXI.Container)
+    expect(element).toBeInstanceOf(Container)
   })
 
   test('create Text', () => {
     const element = createElement(TYPES.Text, { text: 'foobar' })
-    expect(element).toBeInstanceOf(PIXI.Text)
+    expect(element).toBeInstanceOf(Text)
   })
 
   test('create Text as a sprite', () => {
     const element = createElement(TYPES.Text, { text: 'foobar', isSprite: true })
-    expect(element).toBeInstanceOf(PIXI.Sprite)
+    expect(element).toBeInstanceOf(Sprite)
   })
 
   test('create Sprite', () => {
     const element = createElement(TYPES.Sprite, { texture: emptyTexture })
-    expect(element).toBeInstanceOf(PIXI.Sprite)
+    expect(element).toBeInstanceOf(Sprite)
   })
 
   test('create AnimatedSprite', () => {
     const element = createElement(TYPES.AnimatedSprite, { textures: [emptyTexture] })
-    expect(element).toBeInstanceOf(PIXI.AnimatedSprite)
+    expect(element).toBeInstanceOf(AnimatedSprite)
   })
 
   test('create ParticleContainer', () => {
     const element = createElement(TYPES.ParticleContainer)
-    expect(element).toBeInstanceOf(PIXI.ParticleContainer)
+    expect(element).toBeInstanceOf(ParticleContainer)
   })
 
   test('create BitmapText', () => {
@@ -47,35 +58,35 @@ describe('createElement', () => {
       text: 'foobar',
       style: { fontName: 'Desyrel', fontSize: 35, align: 'left' },
     })
-    expect(element).toBeInstanceOf(PIXI.BitmapText)
+    expect(element).toBeInstanceOf(BitmapText)
   })
 
   test('create TilingSprite', () => {
     const element = createElement(TYPES.TilingSprite, { texture: emptyTexture })
-    expect(element).toBeInstanceOf(PIXI.TilingSprite)
+    expect(element).toBeInstanceOf(TilingSprite)
   })
 
   test('create Graphics', () => {
     const element = createElement(TYPES.Graphics)
-    expect(element).toBeInstanceOf(PIXI.Graphics)
+    expect(element).toBeInstanceOf(Graphics)
   })
 
   test('create NineSlicePlane', () => {
     const element = createElement(TYPES.NineSlicePlane, { texture: emptyTexture })
-    expect(element).toBeInstanceOf(PIXI.NineSlicePlane)
+    expect(element).toBeInstanceOf(NineSlicePlane)
   })
 
   test('create SimpleMesh', () => {
     const element = createElement(TYPES.SimpleMesh, { texture: emptyTexture })
-    expect(element).toBeInstanceOf(PIXI.SimpleMesh)
+    expect(element).toBeInstanceOf(SimpleMesh)
   })
 
   test('create SimpleRope', () => {
     const element = createElement(TYPES.SimpleRope, {
       texture: emptyTexture,
-      points: [new PIXI.Point(0, 0), new PIXI.Point(20, 20)],
+      points: [new Point(0, 0), new Point(20, 20)],
     })
-    expect(element).toBeInstanceOf(PIXI.SimpleRope)
+    expect(element).toBeInstanceOf(SimpleRope)
   })
 
   test('get undefined', () => {
@@ -87,7 +98,7 @@ describe('element.applyProps', () => {
   let spy
 
   beforeAll(() => {
-    spy = jest.spyOn(PIXI.Texture, 'from').mockReturnValue(emptyTexture)
+    spy = jest.spyOn(Texture, 'from').mockReturnValue(emptyTexture)
   })
 
   afterAll(() => {
@@ -107,7 +118,7 @@ describe('element.applyProps', () => {
   })
 
   test('AnimatedSprite.applyProps with textures prop exists', () => {
-    const element = createElement(TYPES.AnimatedSprite, { textures: [PIXI.Texture.from('./image.png')] })
+    const element = createElement(TYPES.AnimatedSprite, { textures: [Texture.from('./image.png')] })
     expect(element).toHaveProperty('applyProps')
     expect(spy).lastCalledWith('./image.png')
   })
@@ -163,7 +174,7 @@ describe('element.applyProps', () => {
   test('SimpleRope.applyProps exists', () => {
     const element = createElement(TYPES.SimpleRope, {
       image: './image.png',
-      points: [new PIXI.Point(0, 0), new PIXI.Point(20, 20)],
+      points: [new Point(0, 0), new Point(20, 20)],
     })
     expect(element).toHaveProperty('applyProps')
     expect(spy).toHaveBeenCalledWith('./image.png')
@@ -172,7 +183,7 @@ describe('element.applyProps', () => {
   test('SimpleRope.applyProps image', () => {
     const element = createElement(TYPES.SimpleRope, {
       image: './image.png',
-      points: [new PIXI.Point(0, 0), new PIXI.Point(20, 20)],
+      points: [new Point(0, 0), new Point(20, 20)],
     })
     expect(spy).lastCalledWith('./image.png')
 
@@ -181,7 +192,7 @@ describe('element.applyProps', () => {
       { image: './image.png' },
       {
         image: './new-image.png',
-        points: [new PIXI.Point(0, 0), new PIXI.Point(20, 20)],
+        points: [new Point(0, 0), new Point(20, 20)],
       }
     )
     expect(spy).lastCalledWith('./new-image.png')
@@ -301,7 +312,7 @@ describe('PixiComponent', () => {
     }
 
     const lifecycle = {
-      create: jest.fn(() => new PIXI.Graphics()),
+      create: jest.fn(() => new Graphics()),
       didMount: jest.fn(),
       willUnmount: jest.fn(),
       applyProps: jest.fn(function () {
@@ -319,7 +330,7 @@ describe('PixiComponent', () => {
     expect(element.willUnmount).toBeDefined()
     expect(element.applyProps).toBeDefined()
     expect(element.config).toBe(config)
-    expect(element).toBeInstanceOf(PIXI.Graphics)
+    expect(element).toBeInstanceOf(Graphics)
     expect(lifecycle.create).toHaveBeenCalledTimes(1)
     expect(lifecycle.create).toHaveBeenCalledWith(props)
     expect(lifecycle.applyProps).toHaveBeenCalledTimes(1)
@@ -329,7 +340,7 @@ describe('PixiComponent', () => {
 
   test('create injected component without lifecycle methods', () => {
     new PixiComponent('Rectangle', {
-      create: () => new PIXI.Graphics(),
+      create: () => new Graphics(),
     })
 
     const element = createElement('Rectangle')

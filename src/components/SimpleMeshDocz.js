@@ -1,4 +1,4 @@
-import * as PIXI from 'pixi.js'
+import { DRAW_MODES as PIXI_DRAW_MODES } from '@pixi/constants'
 /* eslint-disable */
 
 const w = 500
@@ -13,7 +13,7 @@ export const vertices = new Float32Array([0, 0, w / 2, 0, w, 0, 0, h / 2, w / 2,
 let DRAW_MODES = 1
 
 if (typeof window !== 'undefined') {
-  DRAW_MODES = PIXI.DRAW_MODES
+  DRAW_MODES = PIXI_DRAW_MODES
 }
 
 export { DRAW_MODES }

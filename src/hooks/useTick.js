@@ -1,5 +1,5 @@
 import invariant from '../utils/invariant'
-import { Application } from 'pixi.js'
+import { Application } from '@pixi/app'
 import { useEffect, useRef } from 'react'
 import { useApp } from './useApp'
 

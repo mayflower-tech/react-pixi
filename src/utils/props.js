@@ -1,4 +1,5 @@
-import { Texture, DisplayObject } from 'pixi.js'
+import { Texture } from '@pixi/core'
+import { DisplayObject } from '@pixi/display'
 import { eventHandlers, setValue } from './pixi'
 import invariant from '../utils/invariant'
 import { not, hasKey } from '../helpers'

@@ -1,4 +1,5 @@
-import { Text, Texture, TextStyle } from 'pixi.js'
+import { Texture } from '@pixi/core'
+import { Text, TextStyle } from '@pixi/text'
 
 let textures = []
 

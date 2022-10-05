@@ -1,7 +1,9 @@
 import React from 'react'
-import * as PIXI from 'pixi.js'
 import renderer from 'react-test-renderer'
 import * as reactTest from '@testing-library/react'
+import { Application } from '@pixi/app'
+import { Container as PixiContainer } from '@pixi/display'
+import { Renderer as PixiRenderer } from '@pixi/core'
 import { PixiFiber } from '../src'
 import { Container, Stage } from '../src'
 import { Context } from '../src/provider'
@@ -104,8 +106,8 @@ describe('stage', () => {
     const el = renderer.create(<Stage width={100} height={50} options={{ backgroundColor: 0xff0000 }} />)
     const app = el.getInstance().app
 
-    expect(app.stage).toBeInstanceOf(PIXI.Container)
-    expect(app).toBeInstanceOf(PIXI.Application)
+    expect(app.stage).toBeInstanceOf(PixiContainer)
+    expect(app).toBeInstanceOf(Application)
     expect(app.renderer.options).toMatchObject({
       backgroundColor: 0xff0000,
       width: 100,
@@ -139,7 +141,7 @@ describe('stage', () => {
 
     expect(spy).toHaveBeenCalledTimes(1)
     expect(spy.mock.calls[0]).toHaveLength(1)
-    expect(spy.mock.calls[0][0]).toBeInstanceOf(PIXI.Application)
+    expect(spy.mock.calls[0][0]).toBeInstanceOf(Application)
   })
 
   test('can be unmounted', () => {
@@ -337,8 +339,8 @@ describe('stage', () => {
     })
 
     test('does not update resolution of interaction plugin if interaction plugin is removed', () => {
-      const interaction = PIXI.Renderer.__plugins.interaction
-      delete PIXI.Renderer.__plugins.interaction
+      const interaction = PixiRenderer.__plugins.interaction
+      delete PixiRenderer.__plugins.interaction
 
       let el = renderer.create(<Stage width={800} height={600} options={{ resolution: 1 }} />)
 
@@ -349,7 +351,7 @@ describe('stage', () => {
       expect(spyResize).toHaveBeenCalledWith(800, 600)
       expect(appRenderer.resolution).toEqual(2)
 
-      PIXI.Renderer.__plugins.interaction = interaction
+      PixiRenderer.__plugins.interaction = interaction
     })
 
     test('clean up media query on unmount', () => {

@@ -1,4 +1,22 @@
-import * as PIXI from 'pixi.js'
+import { Application as PIXI_Application } from '@pixi/app'
+import { Texture as PIXI_Texture } from '@pixi/core'
+import { Container as PIXI_Container, DisplayObject as PIXI_DisplayObject } from '@pixi/display'
+import { Graphics as PIXI_Graphics } from '@pixi/graphics'
+import { InteractionEvent as PIXI_InteractionEvent } from '@pixi/interaction'
+import { Point as PIXI_Point, ObservablePoint as PIXI_ObservablePoint } from '@pixi/math'
+import {
+  NineSlicePlane as PIXI_NineSlicePlane,
+  SimpleRope as PIXI_SimpleRope,
+  SimpleMesh as PIXI_SimpleMesh,
+} from '@pixi/mesh-extras'
+import { Text as PIXI_Text } from '@pixi/text'
+import { BitmapText as PIXI_BitmapText } from '@pixi/text-bitmap'
+import { Ticker as PIXI_Ticker } from '@pixi/ticker'
+import { Sprite as PIXI_Sprite } from '@pixi/sprite'
+import { TilingSprite as PIXI_TilingSprite } from '@pixi/sprite-tiling'
+import { AnimatedSprite as PIXI_AnimatedSprite } from '@pixi/sprite-animated'
+import { ParticleContainer as PIXI_ParticleContainer } from '@pixi/particle-container'
+
 import * as React from 'react'
 
 // Reconciler API
@@ -98,7 +116,7 @@ export type InteractionEventTypes =
   | 'touchstart'
 
 export type InteractionEvents = {
-  [P in InteractionEventTypes]?: (event: PIXI.InteractionEvent) => void
+  [P in InteractionEventTypes]?: (event: PIXI_InteractionEvent) => void
 }
 
 // private
@@ -113,11 +131,11 @@ declare namespace _ReactPixi {
     [P in keyof T]-?: IfEquals<{ [Q in P]: T[P] }, { -readonly [Q in P]: T[P] }, never, P>
   }[keyof T]
 
-  type ApplicationOptions = ConstructorParameters<typeof PIXI.Application>[0]
-  type PointLike = PIXI.Point | PIXI.ObservablePoint | [number, number] | [number] | number | { x: number; y: number }
+  type ApplicationOptions = ConstructorParameters<typeof PIXI_Application>[0]
+  type PointLike = PIXI_Point | PIXI_ObservablePoint | [number, number] | [number] | number | { x: number; y: number }
   type ImageSource = string | HTMLImageElement
   type VideoSource = string | HTMLVideoElement
-  type AnySource = number | ImageSource | VideoSource | HTMLCanvasElement | PIXI.Texture
+  type AnySource = number | ImageSource | VideoSource | HTMLCanvasElement | PIXI_Texture
   type WithPointLike<T extends keyof any> = { [P in T]: PointLike }
 
   interface WithSource {
@@ -156,22 +174,22 @@ declare namespace _ReactPixi {
 
   type P = 'position' | 'scale' | 'pivot' | 'anchor' | 'skew'
 
-  type Container<T extends PIXI.DisplayObject, U = {}> = Partial<
+  type Container<T extends PIXI_DisplayObject, U = {}> = Partial<
     Omit<T, 'children' | P | ReadonlyKeys<T> | keyof U> & WithPointLike<P>
   > &
     U &
     InteractionEvents & { ref?: React.Ref<T> }
 
-  type IContainer = Container<PIXI.Container>
-  type ISprite = Container<PIXI.Sprite, WithSource>
-  type IText = Container<PIXI.Text, WithSource>
+  type IContainer = Container<PIXI_Container>
+  type ISprite = Container<PIXI_Sprite, WithSource>
+  type IText = Container<PIXI_Text, WithSource>
   type IGraphics = Container<
-    PIXI.Graphics,
+    PIXI_Graphics,
     {
       /**
        * Draw a graphic with imperative callback.
        *
-       * @param {PIXI.Graphics} graphics - The graphics instance to draw on
+       * @param {PIXI_Graphics} graphics - The graphics instance to draw on
        * @example
        *
        * draw={g => {
@@ -180,12 +198,12 @@ declare namespace _ReactPixi {
        *   g.endFill();
        * }}
        */
-      draw?(graphics: PIXI.Graphics): void
+      draw?(graphics: PIXI_Graphics): void
     }
   >
 
   type IBitmapText = Container<
-    PIXI.BitmapText,
+    PIXI_BitmapText,
     {
       /**
        * Set the style object
@@ -194,40 +212,40 @@ declare namespace _ReactPixi {
        *
        * style={{ font: '50px Desyrel' }}
        */
-      style?: ConstructorParameters<typeof PIXI.BitmapText>[1]
+      style?: ConstructorParameters<typeof PIXI_BitmapText>[1]
     }
   >
 
-  type INineSlicePlane = Container<PIXI.NineSlicePlane, WithSource>
+  type INineSlicePlane = Container<PIXI_NineSlicePlane, WithSource>
   type IParticleContainer = Container<
-    PIXI.ParticleContainer,
+    PIXI_ParticleContainer,
     {
-      maxSize?: ConstructorParameters<typeof PIXI.ParticleContainer>[0]
-      properties?: ConstructorParameters<typeof PIXI.ParticleContainer>[1]
-      batchSize?: ConstructorParameters<typeof PIXI.ParticleContainer>[2]
-      autoResize?: ConstructorParameters<typeof PIXI.ParticleContainer>[3]
+      maxSize?: ConstructorParameters<typeof PIXI_ParticleContainer>[0]
+      properties?: ConstructorParameters<typeof PIXI_ParticleContainer>[1]
+      batchSize?: ConstructorParameters<typeof PIXI_ParticleContainer>[2]
+      autoResize?: ConstructorParameters<typeof PIXI_ParticleContainer>[3]
     }
   >
 
   type ITilingSprite = Container<
-    PIXI.TilingSprite,
+    PIXI_TilingSprite,
     WithSource & {
       tileScale?: PointLike
       tilePosition: PointLike
     }
   >
 
-  type ISimpleRope = Container<PIXI.SimpleRope, WithSource>
+  type ISimpleRope = Container<PIXI_SimpleRope, WithSource>
   type ISimpleMesh = Container<
-    PIXI.SimpleMesh,
+    PIXI_SimpleMesh,
     WithSource & {
-      uvs?: ConstructorParameters<typeof PIXI.SimpleMesh>[2]
-      indices?: ConstructorParameters<typeof PIXI.SimpleMesh>[3]
+      uvs?: ConstructorParameters<typeof PIXI_SimpleMesh>[2]
+      indices?: ConstructorParameters<typeof PIXI_SimpleMesh>[3]
     }
   >
 
   type IAnimatedSprite = Container<
-    PIXI.AnimatedSprite,
+    PIXI_AnimatedSprite,
     WithSource & {
       isPlaying: boolean
       images?: string[]
@@ -247,7 +265,7 @@ declare namespace _ReactPixi {
     height?: number
 
     /**
-     * Enable the {@see PIXI.Application} ticker? [default=true].
+     * Enable the {@see PIXI_Application} ticker? [default=true].
      * Automatically renders the stage on request animation frame.
      */
     raf?: boolean
@@ -261,7 +279,7 @@ declare namespace _ReactPixi {
     /**
      * The PIXI application options.
      *
-     * @see PIXI.ApplicationOptions
+     * @see PIXI_ApplicationOptions
      * @example
      *
      * options={{ antialias: true, roundPixels: true }}
@@ -271,25 +289,25 @@ declare namespace _ReactPixi {
     /**
      * Callback when the component is successfully mounted
      *
-     * @param {PIXI.Application} app
+     * @param {PIXI_Application} app
      */
-    onMount?(app: PIXI.Application): void
+    onMount?(app: PIXI_Application): void
 
     /**
      * Callback when the component is successfully unmounted
      *
-     * @param {PIXI.Application} app
+     * @param {PIXI_Application} app
      */
-    onUnmount?(app: PIXI.Application): void
+    onUnmount?(app: PIXI_Application): void
   }
 
-  interface ICustomComponent<P extends { [key: string]: any }, PixiInstance extends PIXI.DisplayObject> {
+  interface ICustomComponent<P extends { [key: string]: any }, PixiInstance extends PIXI_DisplayObject> {
     /**
      * Create the PIXI instance
      * The component is created during React reconciliation.
      *
      * @param props passed down props
-     * @returns {PIXI.DisplayObject}
+     * @returns {PIXI_DisplayObject}
      */
     create(props: P): PixiInstance
 
@@ -297,25 +315,25 @@ declare namespace _ReactPixi {
      * Instance mounted
      * This is called during React reconciliation.
      *
-     * @param {PIXI.DisplayObject} instance
-     * @param {PIXI.Container} parent
+     * @param {PIXI_DisplayObject} instance
+     * @param {PIXI_Container} parent
      */
-    didMount?(instance: PixiInstance, parent: PIXI.Container): void
+    didMount?(instance: PixiInstance, parent: PIXI_Container): void
 
     /**
      * Instance will unmount
      * This is called during React reconciliation.
      *
-     * @param {PIXI.DisplayObject} instance
-     * @param {PIXI.Container} parent
+     * @param {PIXI_DisplayObject} instance
+     * @param {PIXI_Container} parent
      */
-    willUnmount?(instance: PixiInstance, parent: PIXI.Container): void
+    willUnmount?(instance: PixiInstance, parent: PIXI_Container): void
 
     /**
      * Apply props for this custom component.
      * This is called during React reconciliation.
      *
-     * @param {PIXI.DisplayObject} instance
+     * @param {PIXI_DisplayObject} instance
      * @param oldProps
      * @param newProps
      */
@@ -358,24 +376,24 @@ export interface ReactPixiRoot {
   unmount(): void
 }
 
-export const createRoot: (container: PIXI.Container) => ReactPixiRoot
+export const createRoot: (container: PIXI_Container) => ReactPixiRoot
 
 // renderer
 /** @deprecated use createRoot instead */
 export const render: (
   element: React.ReactElement | React.ReactElement[] | React.Factory<any>,
-  container: PIXI.Container,
+  container: PIXI_Container,
   callback?: (...args: any) => void
 ) => any
 
 // unmount component
 /** @deprecated use root.unmoun() instead */
-export const unmountComponentAtNode: (container: PIXI.Container) => void
+export const unmountComponentAtNode: (container: PIXI_Container) => void
 
 // context
-export const AppContext: React.Context<PIXI.Application>
-export const AppProvider: React.ComponentType<React.ProviderProps<PIXI.Application>>
-export const AppConsumer: React.ComponentType<React.ConsumerProps<PIXI.Application>>
+export const AppContext: React.Context<PIXI_Application>
+export const AppProvider: React.ComponentType<React.ProviderProps<PIXI_Application>>
+export const AppConsumer: React.ComponentType<React.ConsumerProps<PIXI_Application>>
 
 // fiber
 export const PixiFiber: (
@@ -392,11 +410,11 @@ export class Stage extends React.Component<_ReactPixi.IStage> {}
  *
  * type RectangleProps = { x: number, y: number, color: number };
  *
- * const Rectangle = PixiComponent<RectangleProps, PIXI.Graphics>('Rectangle', {
+ * const Rectangle = PixiComponent<RectangleProps, PIXI_Graphics>('Rectangle', {
  *   create() {
- *     return new PIXI.Graphics();
+ *     return new PIXI_Graphics();
  *   }
- *   applyProps(ins: PIXI.Graphics, oldProps: RectangleProps, newProps: RectangleProps) {
+ *   applyProps(ins: PIXI_Graphics, oldProps: RectangleProps, newProps: RectangleProps) {
  *     ins.clear();
  *     ins.beginFill(newProps.color);
  *     ins.drawRect(newProps.x, newProps.y, 100, 100);
@@ -404,13 +422,13 @@ export class Stage extends React.Component<_ReactPixi.IStage> {}
  *   }
  * });
  */
-export const PixiComponent: <Props, PixiInstance extends PIXI.DisplayObject>(
+export const PixiComponent: <Props, PixiInstance extends PIXI_DisplayObject>(
   componentName: string,
   lifecycle: _ReactPixi.ICustomComponent<Props, PixiInstance>
 ) => React.FC<Props & { ref?: React.Ref<PixiInstance> }>
 
 /**
- * Tap into the {PIXI.Application} ticker raf.
+ * Tap into the {PIXI_Application} ticker raf.
  *
  * @example
  *
@@ -421,29 +439,29 @@ export const PixiComponent: <Props, PixiInstance extends PIXI.DisplayObject>(
  *   return <Sprite x={x} />
  * }
  */
-export const useTick: (tick: (this: PIXI.Ticker, delta: number, ticker: PIXI.Ticker) => void, enabled?: boolean) => void
+export const useTick: (tick: (this: PIXI_Ticker, delta: number, ticker: PIXI_Ticker) => void, enabled?: boolean) => void
 
 /**
- * Get the {<Stage>} {PIXI.Application} instance.
+ * Get the {<Stage>} {PIXI_Application} instance.
  *
  * @example
  *
  * const MyComponent = () => {
- *   const app = useApp(); // app = PIXI.Application
+ *   const app = useApp(); // app = PIXI_Application
  *
  *   return <Sprite x={x} />
  * }
  *
  */
-export const useApp: () => PIXI.Application
+export const useApp: () => PIXI_Application
 
 /**
- * Higher Order Component to attach the {PIXI.Application} to `app` prop.
+ * Higher Order Component to attach the {PIXI_Application} to `app` prop.
  *
  * @example
  *
  * interface Props {
- *   app: PIXI.Application
+ *   app: PIXI_Application
  * }
  *
  * export default withPixiApp(
@@ -452,7 +470,7 @@ export const useApp: () => PIXI.Application
  *   )
  * );
  */
-export const withPixiApp: <P extends { app: PIXI.Application }>(
+export const withPixiApp: <P extends { app: PIXI_Application }>(
   WrappedComponent: React.ComponentType<P>
 ) => React.ComponentClass<Omit<P, 'app'>>
 
@@ -463,14 +481,14 @@ export const withPixiApp: <P extends { app: PIXI.Application }>(
  *
  * const Rectangle = PixiComponent('Rectangle', {
  *   create() {
- *     return new PIXI.Graphics();
+ *     return new PIXI_Graphics();
  *   },
  *   applyProps(instance, oldProps, newProps) {
  *     applyDefaultProps(instance, oldProps, newProps);
  *   }
  * });
  */
-export const applyDefaultProps: <P extends object>(instance: PIXI.DisplayObject, oldProps: P, newProps: P) => void
+export const applyDefaultProps: <P extends object>(instance: PIXI_DisplayObject, oldProps: P, newProps: P) => void
 
 /**
  * Create a filter wrapper to easily facilitate filter arguments as props
@@ -492,7 +510,7 @@ export const applyDefaultProps: <P extends object>(instance: PIXI.DisplayObject,
  * }
  */
 export const withFilters: <
-  Component extends React.ComponentType<_ReactPixi.Container<PIXI.DisplayObject, any>>,
+  Component extends React.ComponentType<_ReactPixi.Container<PIXI_DisplayObject, any>>,
   Filters extends { [filterKey: string]: any }
 >(
   WrapperComponent: Component,

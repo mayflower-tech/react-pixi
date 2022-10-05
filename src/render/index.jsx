@@ -1,7 +1,7 @@
 import invariant from '../utils/invariant'
 import { PixiFiber } from '../reconciler'
 import { ConcurrentRoot } from 'react-reconciler/constants'
-import { Container } from 'pixi.js'
+import { Container } from '@pixi/display'
 
 // cache root containers
 /** @type {Map<Container, any>} */

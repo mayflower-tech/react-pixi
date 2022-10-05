@@ -7,9 +7,12 @@ import babel from 'rollup-plugin-babel'
 import replace from 'rollup-plugin-replace'
 import globals from 'rollup-plugin-node-globals'
 import alias from '@rollup/plugin-alias'
+import packageJson from './package.json'
 
 const prod = process.env.NODE_ENV === 'production'
 const format = process.env.FORMAT
+
+const pixiPackageNames = Object.keys(packageJson.peerDependencies).filter(name => name.startsWith('@pixi'))
 
 function getConfig(dest, format, merge = {}) {
   return {
@@ -21,8 +24,12 @@ function getConfig(dest, format, merge = {}) {
       name: 'ReactPixi',
       sourcemap: !prod,
       globals: {
-        'pixi.js': 'PIXI',
-        'pixi.js-legacy': 'PIXI',
+        // 'pixi.js': 'PIXI',
+        // 'pixi.js-legacy': 'PIXI',
+        ...pixiPackageNames.reduce((acc, curr) => {
+          acc[curr] = 'PIXI'
+          return acc
+        }, {}),
         react: 'React',
       },
       ...(merge.output || {}),
@@ -57,7 +64,12 @@ function getConfig(dest, format, merge = {}) {
       prod && terser(),
       filesize(),
     ].filter(Boolean),
-    external: ['pixi.js', 'pixi.js-legacy', 'react', 'react-dom'],
+    external: [
+      ...pixiPackageNames,
+      // 'pixi.js-legacy',
+      'react',
+      'react-dom',
+    ],
   }
 }
 
@@ -86,9 +98,9 @@ if (format) {
       getConfig(`legacy/react-pixi.${format}${buildType}.js`, format, {
         beforePlugins: [
           alias({ entries: { '@react-spring/animated': './react-spring-create-host.js' } }),
-          babel({
-            plugins: [['module-resolver', { alias: { 'pixi.js': 'pixi.js-legacy' } }]],
-          }),
+          // babel({
+          //   plugins: [['module-resolver', { alias: { 'pixi.js': 'pixi.js-legacy' } }]],
+          // }),
         ],
       })
     )

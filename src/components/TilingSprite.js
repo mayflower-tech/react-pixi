@@ -1,6 +1,10 @@
-import { TilingSprite as PixiTilingSprite } from '@pixi/sprite-tiling'
+import { TilingSprite as PixiTilingSprite, TilingSpriteRenderer } from '@pixi/sprite-tiling'
 import { getTextureFromProps, applyDefaultProps } from '../utils/props'
 import { parsePoint, pointsAreEqual } from '../utils/pixi'
+
+import { extensions } from '@pixi/extensions'
+
+extensions.add(TilingSpriteRenderer)
 
 const TilingSprite = (root, props) => {
   const { width = 100, height = 100 } = props

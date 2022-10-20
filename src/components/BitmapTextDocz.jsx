@@ -1,7 +1,12 @@
 import React from 'react'
 import { BitmapText, Text } from '../../docz-rp'
 import { Loader } from '@pixi/loaders'
+import { extensions } from '@pixi/extensions'
+import { BitmapFontLoader } from '@pixi/text-bitmap'
 
+extensions.add(BitmapFontLoader)
+
+// eslint-disable-next-line react/display-name
 export default props => {
   const [loaded, setLoaded] = React.useState(false)
   const x = props.x

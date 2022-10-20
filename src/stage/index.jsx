@@ -8,11 +8,12 @@ import { AppProvider } from '../provider'
 import { createRoot } from '../render/index.jsx'
 import { extensions } from '@pixi/extensions'
 import { InteractionManager } from '@pixi/interaction'
+import { AppLoaderPlugin } from '@pixi/loaders'
+import { BatchRenderer } from '@pixi/core'
 
 const noop = () => {}
 
-extensions.add(TickerPlugin)
-extensions.add(InteractionManager)
+extensions.add(InteractionManager, BatchRenderer, TickerPlugin, AppLoaderPlugin)
 
 /**
  * -------------------------------------------
@@ -90,7 +91,7 @@ const propTypes = {
     },
   }),
 }
-// let mc = 0
+
 const defaultProps = {
   width: 800,
   height: 600,
@@ -117,14 +118,12 @@ class Stage extends React.Component {
   app = null
 
   componentDidMount() {
-    // console.log('mount', mc++)
     const { onMount, width, height, options, raf, renderOnComponentChange, children } = this.props
 
     this.app = new Application({
       width,
       height,
       view: this._canvas,
-      autoStart: raf,
       ...options,
       autoDensity: options?.autoDensity !== false,
     })

@@ -1,5 +1,6 @@
 import * as RP1 from './src'
-import * as RP2 from './dist/react-pixi.es'
+// TODO Double import messes with extensions system
+// import * as RP2 from './dist/react-pixi.es'
 
 const empty = () => null
 
@@ -8,7 +9,7 @@ let RP
 if (process.env.NODE_ENV === 'development') {
   RP = RP1
 } else {
-  RP = RP2
+  // RP = RP2
 }
 
 export const Stage = RP.Stage || empty

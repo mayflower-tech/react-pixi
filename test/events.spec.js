@@ -30,7 +30,9 @@ describe('react', () => {
     instances = []
     jest.clearAllMocks()
     mockToSpy('../src/reconciler/hostconfig')
-    root = createRoot(container)
+    act(() => {
+      root = createRoot(container)
+    })
 
     hostconfig.createInstance.mockImplementation((...args) => {
       const ins = createElement(...args)
@@ -40,7 +42,9 @@ describe('react', () => {
   })
 
   afterEach(() => {
-    root.unmount()
+    act(() => {
+      root.unmount()
+    })
     const index = eventHandlers.indexOf(CUSTOM_EVENT)
     if (index >= 0) eventHandlers.splice(index, 1)
   })

@@ -1,13 +1,18 @@
 import React from 'react'
 import { Application } from '@pixi/app'
-import { Ticker } from '@pixi/ticker'
+import { Ticker, TickerPlugin } from '@pixi/ticker'
 import PropTypes from 'prop-types'
 import invariant from '../utils/invariant'
 import { PROPS_DISPLAY_OBJECT } from '../utils/props'
 import { AppProvider } from '../provider'
 import { createRoot } from '../render/index.jsx'
+import { extensions } from '@pixi/extensions'
+import { InteractionManager } from '@pixi/interaction'
 
 const noop = () => {}
+
+extensions.add(TickerPlugin)
+extensions.add(InteractionManager)
 
 /**
  * -------------------------------------------
@@ -85,7 +90,7 @@ const propTypes = {
     },
   }),
 }
-
+// let mc = 0
 const defaultProps = {
   width: 800,
   height: 600,
@@ -112,12 +117,14 @@ class Stage extends React.Component {
   app = null
 
   componentDidMount() {
+    // console.log('mount', mc++)
     const { onMount, width, height, options, raf, renderOnComponentChange, children } = this.props
 
     this.app = new Application({
       width,
       height,
       view: this._canvas,
+      autoStart: raf,
       ...options,
       autoDensity: options?.autoDensity !== false,
     })

@@ -104,7 +104,7 @@ describe('hooks', () => {
       jest.spyOn(app.ticker, 'add')
       jest.spyOn(app.ticker, 'remove')
 
-      jest.runAllTimers()
+      jest.runOnlyPendingTimers()
       expect(app.ticker.add).toHaveBeenCalledTimes(0)
       expect(app.ticker.remove).toHaveBeenCalledTimes(0)
 
@@ -114,7 +114,7 @@ describe('hooks', () => {
         render.update(mount())
       })
 
-      jest.runAllTimers()
+      jest.runOnlyPendingTimers()
       expect(app.ticker.add).toHaveBeenCalledTimes(1)
       expect(app.ticker.remove).toHaveBeenCalledTimes(0)
 
@@ -122,7 +122,7 @@ describe('hooks', () => {
         render.update(unmount())
       })
 
-      jest.runAllTimers()
+      jest.runOnlyPendingTimers()
       expect(app.ticker.remove).toHaveBeenCalledTimes(1)
     })
 
@@ -147,6 +147,7 @@ describe('hooks', () => {
       const { rerender, unmount } = reactTest.render(render())
       rerender(render())
 
+      jest.runOnlyPendingTimers()
       unmount()
       expect(fn).toHaveBeenCalledTimes(10)
     })
@@ -181,6 +182,7 @@ describe('hooks', () => {
           rerender(render(enabled))
         })
 
+        jest.runOnlyPendingTimers()
         unmount()
         expect(fn).toHaveBeenCalledTimes(calledTimes)
       }
@@ -206,7 +208,10 @@ describe('hooks', () => {
       )
 
       const { rerender, unmount } = reactTest.render(render())
+
       rerender(render())
+
+      jest.runOnlyPendingTimers()
       unmount()
 
       expect(fn.mock.calls[0][0]).toBeInstanceOf(Ticker)
@@ -228,6 +233,8 @@ describe('hooks', () => {
 
       const { rerender, unmount } = reactTest.render(render())
       rerender(render())
+
+      jest.runOnlyPendingTimers()
       unmount()
 
       expect(typeof fn.mock.calls[0][0]).toBe('number')

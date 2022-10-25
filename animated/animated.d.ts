@@ -371,12 +371,24 @@ export const SimpleRope: AnimatedComponent<React.FC<React.PropsWithChildren<_Rea
 export const SimpleMesh: AnimatedComponent<React.FC<React.PropsWithChildren<_ReactPixi.ISimpleMesh>>>;
 export const AnimatedSprite: AnimatedComponent<React.FC<React.PropsWithChildren<_ReactPixi.IAnimatedSprite>>>;
 
+export interface ReactPixiRoot {
+  render(element: React.ReactElement | React.ReactElement[] | React.Factory<any>): any
+  unmount(): void
+}
+
+export const createRoot: (container: PIXI_Container) => ReactPixiRoot
+
 // renderer
+/** @deprecated use createRoot instead */
 export const render: (
   element: React.ReactElement | React.ReactElement[] | React.Factory<any>,
   container: PIXI_Container,
   callback?: (...args: any) => void
 ) => any;
+
+// unmount component
+/** @deprecated use root.unmount() instead */
+export const unmountComponentAtNode: (container: PIXI_Container) => void
 
 // context
 export const AppContext: React.Context<PIXI_Application>;

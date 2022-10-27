@@ -46,6 +46,8 @@ function getConfig(dest, format, merge = {}) {
         ignoreGlobal: false,
         namedExports: {
           'node_modules/scheduler/index.js': ['unstable_scheduleCallback', 'unstable_cancelCallback'],
+          '@react-spring/core': ['Globals'],
+          '@react-spring/shared': ['createStringInterpolator', 'colors', 'raf'],
           '@react-spring/animated': ['createHost'],
           'react-reconciler/constants': [
             'DiscreteEventPriority',

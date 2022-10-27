@@ -122,7 +122,6 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-reconciler": "^0.29.0",
-    "react-spring": "^9.5.2",
     "react-test-renderer": "^18.2.0",
     "rimraf": "3.0.2",
     "rollup": "2.55.1",
@@ -163,6 +162,17 @@
     "react": "^18.0.0",
     "react-dom": "^18.0.0"
   },
+  "dependencies": {
+    "@react-spring/animated": "~9.5.5",
+    "@react-spring/core": "~9.5.5",
+    "@react-spring/shared": "~9.5.5",
+    "@react-spring/types": "~9.5.5",
+    "@saitonakamura/pixi-extensions": "6.5.8-beta-1"
+  },
+  "resolutions": {
+    "get-pkg-repo": "4.1.1",
+    "hosted-git-info": "^2.1.4"
+  },
   "jest": {
     "testEnvironment": "jsdom",
     "collectCoverage": false,
@@ -174,10 +184,5 @@
       "<rootDir>/test/bootstrap.js",
       "<rootDir>/test/__mocks__/matchMediaMock.js"
     ]
-  },
-  "resolutions": {
-    "get-pkg-repo": "4.1.1",
-    "hosted-git-info": "^2.1.4"
-  },
-  "dependencies": {}
+  }
 }

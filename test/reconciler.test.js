@@ -12,10 +12,18 @@ const act = React.unstable_act
 
 describe('reconciler', () => {
   let container = new PIXI.Container()
+  let container1 = new PIXI.Container()
+  let container2 = new PIXI.Container()
   container.root = true
+  container1.root = true
+  container2.root = true
 
   let root
+  let root1
+  let root2
   const renderInContainer = comp => root.render(comp)
+  const renderInContainer1 = comp => root1.render(comp)
+  const renderInContainer2 = comp => root2.render(comp)
 
   beforeEach(() => {
     jest.clearAllMocks()
@@ -24,7 +32,7 @@ describe('reconciler', () => {
   })
 
   afterEach(() => {
-    root.unmount()
+      act(() => root.unmount())
   })
 
   describe('single render', () => {
@@ -384,10 +392,10 @@ describe('reconciler', () => {
     })
   })
 
-  // TODO Suspence tests just doesn't wort right now and I can't understand why
+  // TODO Suspence tests just doesn't work right now and I can't understand why
   // Probably the async nature interferes somehow
   // Or implementation details of reconciler changed
-  xdescribe('suspense', () => {
+  describe('suspense', () => {
     let asyncLoaded = false
 
     beforeEach(() => {
@@ -408,13 +416,21 @@ describe('reconciler', () => {
       return <Text text={text} />
     }
 
-    test('renders suspense fallback', () => {
+    /**
+     * -------------------------------------------
+     * For React-18 content inside Suspense will not be rendered
+     *
+     * See:
+     *   https://github.com/reactjs/rfcs/blob/main/text/0213-suspense-in-react-18.md#behavior-change-committed-trees-are-always-consistent
+     * -------------------------------------------
+     */
+    test('renders suspense fallback', async () => {
       jest.useFakeTimers()
 
-      const loadingTextRef = React.createRef(null)
-      const siblingTextRef = React.createRef(null)
+      const loadingTextRef = React.createRef()
+      const siblingTextRef = React.createRef()
 
-      act(() =>
+      await act(async () =>
         renderInContainer(
           <Suspense fallback={<Text text="loading" ref={loadingTextRef} />}>
             <Text text="hidden" ref={siblingTextRef} />
@@ -422,83 +438,71 @@ describe('reconciler', () => {
           </Suspense>
         )
       )
-
       jest.runAllTimers()
 
-      // loading Text should be rendered
+      // "loading" Text should be rendered
       expect(loadingTextRef.current).toBeDefined()
-
-      // content should be hidden
-      const hideInstanceMock = getCall(hostconfig.hideInstance)
-      expect(hideInstanceMock.fn).toHaveBeenCalledTimes(1)
-      expect(siblingTextRef.current.visible).toEqual(false)
+      // "hidden" Text should be null
+      expect(siblingTextRef.current).toBeNull();
     })
 
     test('renders suspense content', () => {
       jest.useFakeTimers()
 
-      const siblingTextRef = React.createRef(null)
+      const siblingTextRef = React.createRef()
+      const loadingTextRef = React.createRef()
 
       act(() =>
         renderInContainer(
-          <Suspense fallback={<Text text="loading" />}>
+          <Suspense fallback={<Text text="loading" ref={loadingTextRef} />}>
             <Text text="A" ref={siblingTextRef} />
-            <AsyncText ms={500} text={'content'} />
+            <AsyncText ms={500} text="content" />
           </Suspense>
         )
       )
 
+      expect(siblingTextRef.current).toBeNull();
       jest.runAllTimers()
 
       act(() =>
         renderInContainer(
-          <Suspense fallback={<Text text="loading" />}>
+          <Suspense fallback={<Text text="loading" ref={loadingTextRef} />}>
             <Text text="A" ref={siblingTextRef} />
-            <AsyncText ms={500} text={'content'} />
+            <AsyncText ms={500} text="content" />
           </Suspense>
         )
       )
 
-      // hidden content should be visible again
-      expect(siblingTextRef.current.visible).toEqual(true)
-
-      // sibling text & AsyncText content is unhidden
-      const unhideInstanceMock = getCall(hostconfig.unhideInstance)
-      expect(unhideInstanceMock.fn).toHaveBeenCalledTimes(2)
-
+      // hidden content should be present again
+      expect(siblingTextRef.current).not.toBeNull();
       // loading text, sibling text, and async text content were all created
-      const createInstanceMock = getCall(hostconfig.createInstance)
-      expect(createInstanceMock.all.map(([ins]) => ins)).toEqual(['Text', 'Text', 'Text'])
+      const createInstanceMock = getCall(hostconfig.createInstance);
+      expect(createInstanceMock.all.map(([ins, obj]) => obj.text)).toEqual(['A', 'loading', 'A', 'content'])
     })
   })
 
   describe('emits request render', () => {
     let spy1 = jest.fn()
     let spy2 = jest.fn()
-    let root
-
-    let container2 = new PIXI.Container()
-    container2.root = true
-
     beforeEach(() => {
-      spy1.mockReset()
-      spy2.mockReset()
-      container.on('__REACT_PIXI_REQUEST_RENDER__', spy1)
+      spy1.mockClear()
+      spy2.mockClear()
+      container1.on('__REACT_PIXI_REQUEST_RENDER__', spy1)
       container2.on('__REACT_PIXI_REQUEST_RENDER__', spy2)
-      root = createRoot(container2)
+      root1 = createRoot(container1)
+      root2 = createRoot(container2)
     })
 
     afterEach(() => {
-      container.off('__REACT_PIXI_REQUEST_RENDER__', spy1)
+      container1.off('__REACT_PIXI_REQUEST_RENDER__', spy1)
       container2.off('__REACT_PIXI_REQUEST_RENDER__', spy2)
-      root.unmount()
+      act(() => root1.unmount())
+      act(() => root2.unmount())
     })
-
-    const renderInContainer2 = comp => root.render(comp)
 
     it('receives request events via root container', function () {
       act(() =>
-        renderInContainer(
+        renderInContainer1(
           <Container>
             <Text text="one" />
           </Container>
@@ -506,12 +510,12 @@ describe('reconciler', () => {
       )
 
       expect(spy1).toHaveBeenCalled()
+      expect(spy1).toHaveBeenCalledTimes(2) // spy1 called 2 times: 1 - appendInitialChild, 2 - appendChildToContainer
     })
 
-    // TODO Fix it, more info near the assertions
-    xit('receives different events in different containers', function () {
+    it('receives different events in different containers', function () {
       act(() =>
-        renderInContainer(
+          renderInContainer1(
           <Container>
             <Text text="one" />
           </Container>
@@ -534,11 +538,9 @@ describe('reconciler', () => {
         )
       )
 
-      // TODO Previously it was 1 and 2 accordingly, now it's 2 and 3
-      // I don't know why double render request happens
-      // And I don't know why it's only first time (otherwise it would be 2 and 4)
-      expect(spy1).toHaveBeenCalledTimes(1)
-      expect(spy2).toHaveBeenCalledTimes(2)
+      expect(spy1).toHaveBeenCalledTimes(2); // spy1 called 2 times: 1 - appendInitialChild, 2 - appendChildToContainer
+      expect(spy2).toHaveBeenCalledTimes(3); //  spy2 called 3 times: 1 - appendInitialChild 2 - appendChildToContainer 3 - commitUpdate
     })
   })
 })
+

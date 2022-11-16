@@ -21,8 +21,8 @@ Example with dependencies:
 ```html
 <html>
   <head>
-    <script crossorigin src="https://unpkg.com/react/umd/react.production.min.js"></script>
-    <script crossorigin src="https://unpkg.com/react-dom/umd/react-dom.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     <script crossorigin src="https://unpkg.com/pixi.js/dist/pixi.min.js"></script>
     <script crossorigin src="https://unpkg.com/@inlet/react-pixi/dist/react-pixi.umd.js"></script>
     <script crossorigin src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
@@ -38,8 +38,9 @@ Example with dependencies:
           <Sprite texture={PIXI.Texture.WHITE} tint={0x00ff00} />
         </Stage>
       )
-
-      ReactDOM.render(<App />, document.getElementById('root'))
+      const container = document.getElementById('root');
+      const root = ReactDOM.createRoot(container);
+      root.render(<App />);
     </script>
   </body>
 </html>

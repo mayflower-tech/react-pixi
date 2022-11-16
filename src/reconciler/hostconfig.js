@@ -3,8 +3,8 @@
  * Host Config file.
  *
  * See:
- *   https://github.com/facebook/react/tree/master/packages/react-reconciler
- *   https://github.com/facebook/react/blob/master/packages/react-reconciler/src/forks/ReactFiberHostConfig.custom.js
+ *   https://github.com/facebook/react/tree/main/packages/react-reconciler
+ *   https://github.com/facebook/react/blob/main/packages/react-reconciler/src/forks/ReactFiberHostConfig.custom.js
  * -------------------------------------------
  */
 
